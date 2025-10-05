@@ -21,7 +21,7 @@ class Employee {
     }
 }
 
-public class EmployeeSortLambda {
+public class Main {
     public static void main(String[] args) {
         List<Employee> employees = new ArrayList<>();
         employees.add(new Employee("Riya", 25, 55000));
@@ -30,15 +30,15 @@ public class EmployeeSortLambda {
         employees.add(new Employee("Sneha", 28, 61000));
         employees.add(new Employee("Rahul", 35, 88000));
 
-        System.out.println("\n🔹 Sorted by Name (Alphabetical):");
+        System.out.println("\n Sorted by Name (Alphabetical):");
         employees.sort((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()));
         employees.forEach(System.out::println);
 
-        System.out.println("\n🔹 Sorted by Age (Ascending):");
+        System.out.println("\n Sorted by Age (Ascending):");
         employees.sort((e1, e2) -> Integer.compare(e1.getAge(), e2.getAge()));
         employees.forEach(System.out::println);
 
-        System.out.println("\n🔹 Sorted by Salary (Descending):");
+        System.out.println("\n Sorted by Salary (Descending):");
         employees.sort((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()));
         employees.forEach(System.out::println);
     }
