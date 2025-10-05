@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.Scanner;
 
-public class StudentManagementSystem {
+public class Main {
 
     // ===== MODEL CLASS =====
     static class Student {
@@ -35,7 +35,6 @@ public class StudentManagementSystem {
             }
         }
 
-        // CREATE
         void addStudent(Student s) {
             String sql = "INSERT INTO students (studentID, name, department, marks) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -44,13 +43,12 @@ public class StudentManagementSystem {
                 ps.setString(3, s.department);
                 ps.setDouble(4, s.marks);
                 ps.executeUpdate();
-                System.out.println("✅ Student added successfully!");
+                System.out.println("Student added successfully!");
             } catch (SQLException e) {
                 System.out.println("Error adding student: " + e.getMessage());
             }
         }
 
-        // READ
         void viewStudents() {
             String sql = "SELECT * FROM students";
             try (Statement st = conn.createStatement();
@@ -70,28 +68,26 @@ public class StudentManagementSystem {
             }
         }
 
-        // UPDATE
         void updateStudent(int id, double newMarks) {
             String sql = "UPDATE students SET marks = ? WHERE studentID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setDouble(1, newMarks);
                 ps.setInt(2, id);
                 int rows = ps.executeUpdate();
-                if (rows > 0) System.out.println("✅ Student updated successfully!");
-                else System.out.println("⚠️ No student found with ID " + id);
+                if (rows > 0) System.out.println(" Student updated successfully!");
+                else System.out.println(" No student found with ID " + id);
             } catch (SQLException e) {
                 System.out.println("Error updating student: " + e.getMessage());
             }
         }
 
-        // DELETE
         void deleteStudent(int id) {
             String sql = "DELETE FROM students WHERE studentID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 int rows = ps.executeUpdate();
-                if (rows > 0) System.out.println("✅ Student deleted successfully!");
-                else System.out.println("⚠️ No student found with ID " + id);
+                if (rows > 0) System.out.println(" Student deleted successfully!");
+                else System.out.println(" No student found with ID " + id);
             } catch (SQLException e) {
                 System.out.println("Error deleting student: " + e.getMessage());
             }
