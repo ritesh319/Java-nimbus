@@ -24,7 +24,7 @@ class Student {
     }
 }
 
-public class StudentFilterStream {
+public class Main {
     public static void main(String[] args) {
         List<Student> students = Arrays.asList(
             new Student("Riya", 82.5),
