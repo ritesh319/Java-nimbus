@@ -11,8 +11,8 @@ public class ProductManagementSystem {
         Scanner sc = new Scanner(System.in);
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            conn.setAutoCommit(false); // Enable manual transaction control
-            System.out.println("✅ Database connected successfully!");
+            conn.setAutoCommit(false); 
+            System.out.println(" Database connected successfully!");
 
             while (true) {
                 System.out.println("\n=== PRODUCT MANAGEMENT SYSTEM ===");
@@ -51,7 +51,6 @@ public class ProductManagementSystem {
         }
     }
 
-    // CREATE
     private static void addProduct(Connection conn, Scanner sc) {
         try {
             System.out.print("Enter Product ID: ");
@@ -73,10 +72,10 @@ public class ProductManagementSystem {
 
             ps.executeUpdate();
             conn.commit();
-            System.out.println("✅ Product added successfully!");
+            System.out.println("Product added successfully!");
 
         } catch (SQLException e) {
-            System.out.println("❌ Error adding product: " + e.getMessage());
+            System.out.println("Error adding product: " + e.getMessage());
             try {
                 conn.rollback();
             } catch (SQLException ex) {
@@ -85,7 +84,6 @@ public class ProductManagementSystem {
         }
     }
 
-    // READ
     private static void viewProducts(Connection conn) {
         try {
             String sql = "SELECT * FROM Product";
@@ -102,11 +100,10 @@ public class ProductManagementSystem {
                         rs.getInt("Quantity"));
             }
         } catch (SQLException e) {
-            System.out.println("❌ Error fetching products: " + e.getMessage());
+            System.out.println("Error fetching products: " + e.getMessage());
         }
     }
 
-    // UPDATE
     private static void updateProduct(Connection conn, Scanner sc) {
         try {
             System.out.print("Enter Product ID to update: ");
@@ -125,12 +122,12 @@ public class ProductManagementSystem {
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 conn.commit();
-                System.out.println("✅ Product updated successfully!");
+                System.out.println("Product updated successfully!");
             } else {
-                System.out.println("⚠️ No product found with ID " + id);
+                System.out.println("No product found with ID " + id);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Error updating product: " + e.getMessage());
+            System.out.println("Error updating product: " + e.getMessage());
             try {
                 conn.rollback();
             } catch (SQLException ex) {
@@ -139,7 +136,6 @@ public class ProductManagementSystem {
         }
     }
 
-    // DELETE
     private static void deleteProduct(Connection conn, Scanner sc) {
         try {
             System.out.print("Enter Product ID to delete: ");
@@ -152,12 +148,12 @@ public class ProductManagementSystem {
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 conn.commit();
-                System.out.println("✅ Product deleted successfully!");
+                System.out.println("Product deleted successfully!");
             } else {
-                System.out.println("⚠️ No product found with ID " + id);
+                System.out.println("No product found with ID " + id);
             }
         } catch (SQLException e) {
-            System.out.println("❌ Error deleting product: " + e.getMessage());
+            System.out.println("Error deleting product: " + e.getMessage());
             try {
                 conn.rollback();
             } catch (SQLException ex) {
