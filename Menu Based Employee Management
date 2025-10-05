@@ -62,7 +62,7 @@ public class EmployeeFileApp {
             employees.add(emp);
             writeEmployees(employees);
 
-            System.out.println("✅ Employee added successfully!");
+            System.out.println("Employee added successfully!");
         } catch (Exception e) {
             System.out.println("Error adding employee: " + e.getMessage());
         }
