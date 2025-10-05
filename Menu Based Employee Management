@@ -20,7 +20,7 @@ class Employee implements Serializable {
     }
 }
 
-public class EmployeeFileApp {
+public class Main {
     private static final String FILE_NAME = "employees.dat";
     private static Scanner sc = new Scanner(System.in);
 
