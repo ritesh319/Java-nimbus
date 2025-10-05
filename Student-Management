@@ -1,0 +1,170 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class StudentManagementSystem {
+
+    // ===== MODEL CLASS =====
+    static class Student {
+        int studentID;
+        String name;
+        String department;
+        double marks;
+
+        Student(int studentID, String name, String department, double marks) {
+            this.studentID = studentID;
+            this.name = name;
+            this.department = department;
+            this.marks = marks;
+        }
+    }
+
+    // ===== CONTROLLER CLASS =====
+    static class StudentController {
+        private Connection conn;
+
+        StudentController() {
+            try {
+                // Change database credentials as needed
+                String url = "jdbc:mysql://localhost:3306/studentdb";
+                String user = "root";
+                String pass = "password";
+                conn = DriverManager.getConnection(url, user, pass);
+            } catch (SQLException e) {
+                System.out.println("Database Connection Failed!");
+                e.printStackTrace();
+            }
+        }
+
+        // CREATE
+        void addStudent(Student s) {
+            String sql = "INSERT INTO students (studentID, name, department, marks) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, s.studentID);
+                ps.setString(2, s.name);
+                ps.setString(3, s.department);
+                ps.setDouble(4, s.marks);
+                ps.executeUpdate();
+                System.out.println("✅ Student added successfully!");
+            } catch (SQLException e) {
+                System.out.println("Error adding student: " + e.getMessage());
+            }
+        }
+
+        // READ
+        void viewStudents() {
+            String sql = "SELECT * FROM students";
+            try (Statement st = conn.createStatement();
+                 ResultSet rs = st.executeQuery(sql)) {
+
+                System.out.printf("%-10s %-20s %-15s %-10s%n", "ID", "Name", "Department", "Marks");
+                System.out.println("---------------------------------------------------------");
+                while (rs.next()) {
+                    System.out.printf("%-10d %-20s %-15s %-10.2f%n",
+                            rs.getInt("studentID"),
+                            rs.getString("name"),
+                            rs.getString("department"),
+                            rs.getDouble("marks"));
+                }
+            } catch (SQLException e) {
+                System.out.println("Error retrieving data: " + e.getMessage());
+            }
+        }
+
+        // UPDATE
+        void updateStudent(int id, double newMarks) {
+            String sql = "UPDATE students SET marks = ? WHERE studentID = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setDouble(1, newMarks);
+                ps.setInt(2, id);
+                int rows = ps.executeUpdate();
+                if (rows > 0) System.out.println("✅ Student updated successfully!");
+                else System.out.println("⚠️ No student found with ID " + id);
+            } catch (SQLException e) {
+                System.out.println("Error updating student: " + e.getMessage());
+            }
+        }
+
+        // DELETE
+        void deleteStudent(int id) {
+            String sql = "DELETE FROM students WHERE studentID = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                int rows = ps.executeUpdate();
+                if (rows > 0) System.out.println("✅ Student deleted successfully!");
+                else System.out.println("⚠️ No student found with ID " + id);
+            } catch (SQLException e) {
+                System.out.println("Error deleting student: " + e.getMessage());
+            }
+        }
+    }
+
+    // ===== VIEW (MAIN MENU) =====
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StudentController controller = new StudentController();
+
+        while (true) {
+            System.out.println("\n=== STUDENT MANAGEMENT SYSTEM ===");
+            System.out.println("1. Add Student");
+            System.out.println("2. View All Students");
+            System.out.println("3. Update Student Marks");
+            System.out.println("4. Delete Student");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Student ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine(); // consume newline
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter Department: ");
+                    String dept = sc.nextLine();
+                    System.out.print("Enter Marks: ");
+                    double marks = sc.nextDouble();
+                    controller.addStudent(new Student(id, name, dept, marks));
+                    break;
+
+                case 2:
+                    controller.viewStudents();
+                    break;
+
+                case 3:
+                    System.out.print("Enter Student ID to Update: ");
+                    int uid = sc.nextInt();
+                    System.out.print("Enter New Marks: ");
+                    double newMarks = sc.nextDouble();
+                    controller.updateStudent(uid, newMarks);
+                    break;
+
+                case 4:
+                    System.out.print("Enter Student ID to Delete: ");
+                    int did = sc.nextInt();
+                    controller.deleteStudent(did);
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+        }
+    }
+}
+
+// Database code
+
+CREATE DATABASE studentdb;
+
+USE studentdb;
+
+CREATE TABLE students (
+    studentID INT PRIMARY KEY,
+    name VARCHAR(100),
+    department VARCHAR(50),
+    marks DOUBLE
+);
